@@ -24,18 +24,11 @@
     }
     .nav-logo { font-family: Georgia, serif; color: var(--gold); font-size: 22px; letter-spacing: 3px; }
     .nav-logo span { color: var(--cream); font-weight: 300; font-size: 14px; letter-spacing: 5px; display: block; }
-    .nav-cta {
-      background: var(--gold); color: var(--dark-brown);
-      padding: 10px 24px; border: none; font-size: 13px;
-      letter-spacing: 2px; cursor: pointer; text-decoration: none; font-weight: 700;
-    }
+    .nav-cta { background: var(--gold); color: var(--dark-brown); padding: 10px 24px; border: none; font-size: 13px; letter-spacing: 2px; cursor: pointer; text-decoration: none; font-weight: 700; }
 
     .hero { text-align: center; padding: 100px 40px 80px; background: var(--cream); }
     .hero-tag { font-size: 11px; letter-spacing: 4px; color: var(--gold); margin-bottom: 24px; }
-    .hero h1 {
-      font-family: Georgia, serif; font-size: 52px; color: var(--dark-brown);
-      line-height: 1.2; margin-bottom: 24px; max-width: 700px; margin-left: auto; margin-right: auto;
-    }
+    .hero h1 { font-family: Georgia, serif; font-size: 52px; color: var(--dark-brown); line-height: 1.2; margin-bottom: 24px; max-width: 700px; margin-left: auto; margin-right: auto; }
     .hero p { font-size: 17px; color: var(--mid-brown); max-width: 560px; margin: 0 auto 40px; line-height: 1.7; }
     .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
     .btn-primary { background: var(--dark-brown); color: var(--cream); padding: 16px 36px; font-size: 13px; letter-spacing: 2px; text-decoration: none; font-weight: 700; }
@@ -63,9 +56,21 @@
 
     .pricing { background: #ede8df; padding: 80px 40px; text-align: center; }
     .pricing h2 { font-family: Georgia, serif; font-size: 34px; color: var(--dark-brown); margin-bottom: 12px; }
-    .pricing > p { color: var(--mid-brown); font-size: 14px; letter-spacing: 2px; margin-bottom: 60px; }
-    .plans { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; max-width: 900px; margin: 0 auto; }
-    .plan { background: var(--white); border: 1px solid #e8ddd0; padding: 40px 32px; flex: 1; min-width: 240px; max-width: 280px; text-align: left; position: relative; }
+    .pricing > p { color: var(--mid-brown); font-size: 14px; letter-spacing: 2px; margin-bottom: 16px; }
+
+    .setup-note {
+      background: var(--dark-brown);
+      color: var(--gold);
+      font-size: 13px;
+      padding: 12px 24px;
+      display: inline-block;
+      margin-bottom: 50px;
+      letter-spacing: 1px;
+    }
+    .setup-note strong { color: var(--cream); }
+
+    .plans { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; max-width: 960px; margin: 0 auto; }
+    .plan { background: var(--white); border: 1px solid #e8ddd0; padding: 40px 32px; flex: 1; min-width: 240px; max-width: 290px; text-align: left; position: relative; }
     .plan.popular { border-color: var(--gold); background: var(--dark-brown); }
     .plan.popular h3, .plan.popular .price, .plan.popular li { color: var(--cream) !important; }
     .plan.popular .price span { color: var(--gold) !important; }
@@ -75,8 +80,10 @@
     .plan.popular .subtitle { color: var(--gold); }
     .price { font-family: Georgia, serif; font-size: 42px; color: var(--dark-brown); margin-bottom: 4px; }
     .price span { font-size: 16px; color: var(--mid-brown); }
-    .price-note { font-size: 11px; color: var(--mid-brown); margin-bottom: 28px; }
+    .price-note { font-size: 11px; color: var(--mid-brown); margin-bottom: 6px; }
+    .price-setup { font-size: 12px; color: var(--gold); margin-bottom: 24px; font-weight: 700; }
     .plan.popular .price-note { color: var(--gold); opacity: 0.7; }
+    .plan.popular .price-setup { color: var(--cream); }
     .plan ul { list-style: none; margin-bottom: 32px; }
     .plan li { font-size: 13px; color: var(--mid-brown); padding: 7px 0; border-bottom: 1px solid #f0ebe3; display: flex; align-items: center; gap: 8px; }
     .plan.popular li { border-bottom-color: rgba(255,255,255,0.1); }
@@ -257,13 +264,17 @@
 <section class="pricing" id="pricing">
   <h2>Simple, Transparent Pricing</h2>
   <p>7-DAY FREE TRIAL — NO CREDIT CARD REQUIRED</p>
+  <div class="setup-note">
+    One-time setup fee: <strong>$300</strong> — We configure everything for you, ready in 24 hours.
+  </div>
   <div class="plans">
 
     <div class="plan">
       <h3>Starter</h3>
       <p class="subtitle">FOR SMALL BUSINESSES</p>
-      <div class="price">$99<span>/mo</span></div>
+      <div class="price">$149<span>/mo</span></div>
       <p class="price-note">7-day free trial included</p>
+      <p class="price-setup">+ $300 one-time setup</p>
       <ul>
         <li>1 AI Chat Agent</li>
         <li>Website Integration</li>
@@ -279,8 +290,9 @@
       <div class="popular-badge">MOST POPULAR</div>
       <h3>Professional</h3>
       <p class="subtitle">FOR GROWING BUSINESSES</p>
-      <div class="price">$149<span>/mo</span></div>
+      <div class="price">$249<span>/mo</span></div>
       <p class="price-note">7-day free trial included</p>
+      <p class="price-setup">+ $300 one-time setup</p>
       <ul>
         <li>1 AI Chat Agent</li>
         <li>Website + WhatsApp</li>
@@ -296,8 +308,9 @@
     <div class="plan">
       <h3>Premium</h3>
       <p class="subtitle">FOR ESTABLISHED BUSINESSES</p>
-      <div class="price">$199<span>/mo</span></div>
+      <div class="price">$349<span>/mo</span></div>
       <p class="price-note">7-day free trial included</p>
+      <p class="price-setup">+ $300 one-time setup</p>
       <ul>
         <li>2 AI Chat Agents</li>
         <li>All Channels</li>
