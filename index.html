@@ -91,7 +91,8 @@
     footer { background: var(--dark-brown); padding: 40px 60px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
     .footer-logo { font-family: Georgia, serif; color: var(--gold); font-size: 18px; letter-spacing: 3px; }
     footer p { color: var(--gold); font-size: 12px; opacity: 0.6; }
-    footer a { color: var(--gold); text-decoration: none; font-size: 13px; margin-left: 24px; opacity: 0.8; }
+    .footer-links { display: flex; gap: 24px; }
+    footer a { color: var(--gold); text-decoration: none; font-size: 13px; opacity: 0.8; }
 
     .demo-section { background: var(--dark-brown); padding: 80px 40px; text-align: center; }
     .demo-section h2 { font-family: Georgia, serif; font-size: 36px; color: var(--cream); margin-bottom: 16px; }
@@ -115,7 +116,7 @@
       .plans { gap: 16px; padding: 0 8px; }
       .plan { min-width: 100%; max-width: 100%; }
       footer { padding: 30px 20px; flex-direction: column; text-align: center; }
-      footer a { margin: 0 10px; }
+      .footer-links { justify-content: center; }
     }
   </style>
 </head>
@@ -123,7 +124,7 @@
 
 <nav>
   <div class="nav-logo">NORA<span>AGENTS</span></div>
-  <a href="https://app.noraagents.com/en/billing/stripe/subscription/checkout/session/?purchase_type=package&plan_key=basic&stripe_price_id=price_1TZGywIw9dxkazGAB8aMtgob&billing_cycle=month" class="nav-cta">GET STARTED</a>
+  <a href="#pricing" class="nav-cta">GET STARTED</a>
 </nav>
 
 <section class="hero">
@@ -385,7 +386,7 @@
 <footer>
   <div class="footer-logo">NORA AGENTS</div>
   <p>© 2026 Nora Agents. All rights reserved.</p>
-  <div>
+  <div class="footer-links">
     <a href="https://app.noraagents.com/en/accounts/login/">Sign In</a>
     <a href="mailto:support@noraagents.com">Contact</a>
   </div>
