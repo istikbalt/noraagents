@@ -48,11 +48,12 @@
     .services h2 { font-family: Georgia, serif; font-size: 34px; color: var(--dark-brown); margin-bottom: 12px; }
     .services > p { color: var(--mid-brown); font-size: 14px; letter-spacing: 2px; margin-bottom: 60px; }
     .cards { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; max-width: 1200px; margin: 0 auto; }
-    .card { background: var(--white); border: 1px solid #e8ddd0; padding: 32px 24px; flex: 1; min-width: 200px; max-width: 260px; text-align: left; }
+    .card { background: var(--white); border: 1px solid #e8ddd0; padding: 32px 24px; flex: 1; min-width: 280px; max-width: 320px; text-align: left; }
     .card-icon { font-size: 26px; margin-bottom: 14px; }
     .card h3 { font-family: Georgia, serif; font-size: 17px; color: var(--dark-brown); margin-bottom: 10px; }
     .card p { font-size: 13px; color: var(--mid-brown); line-height: 1.6; margin-bottom: 14px; }
-    .card-tag { display: inline-block; background: var(--cream); color: var(--mid-brown); font-size: 10px; letter-spacing: 1px; padding: 3px 8px; border: 1px solid var(--gold); margin-right: 4px; margin-bottom: 4px; }
+    .card-tags { display: flex; flex-wrap: nowrap; gap: 4px; }
+    .card-tag { display: inline-block; background: var(--cream); color: var(--mid-brown); font-size: 10px; letter-spacing: 1px; padding: 3px 8px; border: 1px solid var(--gold); white-space: nowrap; }
 
     .pricing { background: #ede8df; padding: 80px 40px; text-align: center; }
     .pricing h2 { font-family: Georgia, serif; font-size: 34px; color: var(--dark-brown); margin-bottom: 12px; }
@@ -107,6 +108,10 @@
       .hero { padding: 60px 20px; }
       footer { padding: 30px 20px; flex-direction: column; text-align: center; }
       footer a { margin: 0 10px; }
+      .services { padding: 60px 16px; }
+      .cards { gap: 16px; }
+      .card { min-width: calc(100% - 32px); max-width: 100%; }
+      .card-tags { flex-wrap: wrap; }
     }
   </style>
 </head>
@@ -159,104 +164,104 @@
       <div class="card-icon">🍽️</div>
       <h3>Restaurant Reservation</h3>
       <p>Answers questions about hours, menu, and availability, collects guest details, and helps book reservations in a warm, hospitality-focused tone.</p>
-      <span class="card-tag">APPOINTMENT SCHEDULING</span>
-    </div>
+      <div class="card-tags"><span class="card-tag">APPOINTMENT SCHEDULING</span>
+    </div></div>
 
     <div class="card">
       <div class="card-icon">🏠</div>
       <h3>Real Estate Agent</h3>
       <p>Answers questions about listings, neighborhoods, and the buying or selling process, collects lead information, and helps schedule property tours or consultations.</p>
-      <span class="card-tag">APPOINTMENT SCHEDULING</span>
+      <div class="card-tags"><span class="card-tag">APPOINTMENT SCHEDULING</span>
       <span class="card-tag">LEAD GENERATION</span>
-    </div>
+    </div></div>
 
     <div class="card">
       <div class="card-icon">🏡</div>
       <h3>Real Estate Investor</h3>
       <p>Answers questions from motivated sellers, gathers key property and contact information, and qualifies leads before offering to schedule a call.</p>
-      <span class="card-tag">APPOINTMENT SCHEDULING</span>
+      <div class="card-tags"><span class="card-tag">APPOINTMENT SCHEDULING</span>
       <span class="card-tag">LEAD GENERATION</span>
-    </div>
+    </div></div>
 
     <div class="card">
       <div class="card-icon">⚖️</div>
       <h3>Law Firm Intake</h3>
       <p>Answers common legal service questions, gathers key client details, and helps schedule consultations using a respectful, professional tone tailored to your practice area.</p>
-      <span class="card-tag">APPOINTMENT SCHEDULING</span>
+      <div class="card-tags"><span class="card-tag">APPOINTMENT SCHEDULING</span>
       <span class="card-tag">LEAD GENERATION</span>
-    </div>
+    </div></div>
 
     <div class="card">
       <div class="card-icon">💆</div>
       <h3>Medical Spa</h3>
       <p>Answers questions about treatments and pricing, collects client information, and guides them through booking a consultation or appointment using a warm, professional tone.</p>
-      <span class="card-tag">APPOINTMENT SCHEDULING</span>
+      <div class="card-tags"><span class="card-tag">APPOINTMENT SCHEDULING</span>
       <span class="card-tag">LEAD GENERATION</span>
-    </div>
+    </div></div>
 
     <div class="card">
       <div class="card-icon">✂️</div>
       <h3>Barber Shop</h3>
       <p>Answers questions about services and pricing, gathers client details, and helps book appointments.</p>
-      <span class="card-tag">APPOINTMENT SCHEDULING</span>
+      <div class="card-tags"><span class="card-tag">APPOINTMENT SCHEDULING</span>
       <span class="card-tag">LEAD GENERATION</span>
-    </div>
+    </div></div>
 
     <div class="card">
       <div class="card-icon">🦷</div>
       <h3>Dental Office</h3>
       <p>Answers common questions about procedures, insurance, and availability, collects patient information, and helps schedule appointments using a professional, patient-friendly tone.</p>
-      <span class="card-tag">APPOINTMENT SCHEDULING</span>
+      <div class="card-tags"><span class="card-tag">APPOINTMENT SCHEDULING</span>
       <span class="card-tag">LEAD GENERATION</span>
-    </div>
+    </div></div>
 
     <div class="card">
       <div class="card-icon">💅</div>
       <h3>Nail Salon</h3>
       <p>Answers common questions about services and pricing, collects client information, and helps schedule appointments.</p>
-      <span class="card-tag">APPOINTMENT SCHEDULING</span>
+      <div class="card-tags"><span class="card-tag">APPOINTMENT SCHEDULING</span>
       <span class="card-tag">LEAD GENERATION</span>
-    </div>
+    </div></div>
 
     <div class="card">
       <div class="card-icon">🛡️</div>
       <h3>Insurance Sales</h3>
       <p>Guides potential clients through the sales process, collecting contact information and helping book appointments when appropriate.</p>
-      <span class="card-tag">APPOINTMENT SCHEDULING</span>
+      <div class="card-tags"><span class="card-tag">APPOINTMENT SCHEDULING</span>
       <span class="card-tag">LEAD GENERATION</span>
-    </div>
+    </div></div>
 
     <div class="card">
       <div class="card-icon">🛒</div>
       <h3>Ecommerce Support</h3>
       <p>Answers customer questions about products, shipping, and returns, collects shopper details, and recommends items to help guide purchases in a helpful, brand-aligned tone.</p>
-      <span class="card-tag">ECOMMERCE</span>
+      <div class="card-tags"><span class="card-tag">ECOMMERCE</span>
       <span class="card-tag">SUPPORT</span>
-    </div>
+    </div></div>
 
     <div class="card">
       <div class="card-icon">🌿</div>
       <h3>Landscaping Sales</h3>
       <p>Answers questions about services, seasonal offerings, and pricing, collects property and contact details, and helps schedule consultations or estimates in a friendly, professional tone.</p>
-      <span class="card-tag">APPOINTMENT SCHEDULING</span>
+      <div class="card-tags"><span class="card-tag">APPOINTMENT SCHEDULING</span>
       <span class="card-tag">LEAD GENERATION</span>
-    </div>
+    </div></div>
 
     <div class="card">
       <div class="card-icon">🏗️</div>
       <h3>Roofing Company</h3>
       <p>Answers questions about services and materials, collects homeowner information, and helps schedule free roof inspections using a trustworthy, homeowner-friendly tone.</p>
-      <span class="card-tag">APPOINTMENT SCHEDULING</span>
+      <div class="card-tags"><span class="card-tag">APPOINTMENT SCHEDULING</span>
       <span class="card-tag">LEAD GENERATION</span>
-    </div>
+    </div></div>
 
     <div class="card">
       <div class="card-icon">🤖</div>
       <h3>AI Agent Sales</h3>
       <p>Answers questions about what AI Agents can do and how they impact businesses, gathers details about the user's business and goals, and helps book a demo or start a trial.</p>
-      <span class="card-tag">APPOINTMENT SCHEDULING</span>
+      <div class="card-tags"><span class="card-tag">APPOINTMENT SCHEDULING</span>
       <span class="card-tag">LEAD GENERATION</span>
-    </div>
+    </div></div>
 
   </div>
 </section>
