@@ -3,30 +3,534 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nora Agents</title>
+  <title>Nora Agents — AI Assistants for Your Business</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { 
-      font-family: Georgia, serif; 
-      background: #f5f0e8; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      min-height: 100vh;
-      color: #3d1f0a;
+    
+    :root {
+      --cream: #f5f0e8;
+      --dark-brown: #3d1f0a;
+      --mid-brown: #8B5E3C;
+      --gold: #c8a165;
+      --light-brown: #d4a96a;
+      --white: #ffffff;
     }
-    .container { text-align: center; padding: 40px; }
-    h1 { font-size: 48px; letter-spacing: 8px; margin-bottom: 10px; }
-    p { font-family: Arial, sans-serif; font-size: 14px; letter-spacing: 4px; color: #8B5E3C; margin-top: 20px; }
-    .dot { color: #c8a165; margin: 0 10px; }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: var(--cream);
+      color: var(--dark-brown);
+    }
+
+    /* NAV */
+    nav {
+      background: var(--dark-brown);
+      padding: 20px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-logo {
+      font-family: Georgia, serif;
+      color: var(--gold);
+      font-size: 22px;
+      letter-spacing: 3px;
+    }
+    .nav-logo span { color: var(--cream); font-weight: 300; font-size: 14px; letter-spacing: 5px; display: block; }
+    .nav-cta {
+      background: var(--gold);
+      color: var(--dark-brown);
+      padding: 10px 24px;
+      border: none;
+      font-size: 13px;
+      letter-spacing: 2px;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 100px 40px 80px;
+      background: var(--cream);
+    }
+    .hero-tag {
+      font-size: 11px;
+      letter-spacing: 4px;
+      color: var(--gold);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-family: Georgia, serif;
+      font-size: 52px;
+      color: var(--dark-brown);
+      line-height: 1.2;
+      margin-bottom: 24px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero p {
+      font-size: 17px;
+      color: var(--mid-brown);
+      max-width: 560px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+    }
+    .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--dark-brown);
+      color: var(--cream);
+      padding: 16px 36px;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--dark-brown);
+      padding: 16px 36px;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-decoration: none;
+      border: 1px solid var(--mid-brown);
+    }
+    .divider {
+      width: 60px;
+      height: 1px;
+      background: var(--gold);
+      margin: 0 auto 20px;
+    }
+
+    /* HOW IT WORKS */
+    .how {
+      background: var(--dark-brown);
+      padding: 80px 40px;
+      text-align: center;
+    }
+    .how h2 {
+      font-family: Georgia, serif;
+      font-size: 34px;
+      color: var(--cream);
+      margin-bottom: 12px;
+    }
+    .how p { color: var(--gold); font-size: 14px; letter-spacing: 2px; margin-bottom: 60px; }
+    .steps {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .step {
+      flex: 1;
+      min-width: 200px;
+      max-width: 240px;
+      text-align: center;
+    }
+    .step-num {
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      color: var(--gold);
+      font-family: Georgia, serif;
+      font-size: 20px;
+    }
+    .step h3 { color: var(--cream); font-size: 15px; margin-bottom: 10px; letter-spacing: 1px; }
+    .step p { color: var(--gold); font-size: 13px; line-height: 1.6; opacity: 0.8; }
+
+    /* SERVICES */
+    .services {
+      padding: 80px 40px;
+      text-align: center;
+      background: var(--cream);
+    }
+    .services h2 {
+      font-family: Georgia, serif;
+      font-size: 34px;
+      color: var(--dark-brown);
+      margin-bottom: 12px;
+    }
+    .services > p { color: var(--mid-brown); font-size: 14px; letter-spacing: 2px; margin-bottom: 60px; }
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      justify-content: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .card {
+      background: var(--white);
+      border: 1px solid #e8ddd0;
+      padding: 36px 28px;
+      flex: 1;
+      min-width: 220px;
+      max-width: 280px;
+      text-align: left;
+    }
+    .card-icon {
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+    .card h3 {
+      font-family: Georgia, serif;
+      font-size: 18px;
+      color: var(--dark-brown);
+      margin-bottom: 10px;
+    }
+    .card p {
+      font-size: 13px;
+      color: var(--mid-brown);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .card-tag {
+      display: inline-block;
+      background: var(--cream);
+      color: var(--mid-brown);
+      font-size: 10px;
+      letter-spacing: 2px;
+      padding: 4px 10px;
+      border: 1px solid var(--gold);
+      margin-right: 4px;
+      margin-bottom: 4px;
+    }
+
+    /* PRICING */
+    .pricing {
+      background: #ede8df;
+      padding: 80px 40px;
+      text-align: center;
+    }
+    .pricing h2 {
+      font-family: Georgia, serif;
+      font-size: 34px;
+      color: var(--dark-brown);
+      margin-bottom: 12px;
+    }
+    .pricing > p { color: var(--mid-brown); font-size: 14px; letter-spacing: 2px; margin-bottom: 60px; }
+    .plans {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .plan {
+      background: var(--white);
+      border: 1px solid #e8ddd0;
+      padding: 40px 32px;
+      flex: 1;
+      min-width: 240px;
+      max-width: 280px;
+      text-align: left;
+      position: relative;
+    }
+    .plan.popular {
+      border-color: var(--gold);
+      background: var(--dark-brown);
+    }
+    .plan.popular h3, .plan.popular .price, .plan.popular li { color: var(--cream) !important; }
+    .plan.popular .price span { color: var(--gold) !important; }
+    .popular-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gold);
+      color: var(--dark-brown);
+      font-size: 10px;
+      letter-spacing: 2px;
+      padding: 4px 14px;
+      font-weight: 700;
+    }
+    .plan h3 {
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: var(--dark-brown);
+      margin-bottom: 8px;
+    }
+    .plan .subtitle {
+      font-size: 12px;
+      color: var(--mid-brown);
+      letter-spacing: 2px;
+      margin-bottom: 24px;
+    }
+    .plan.popular .subtitle { color: var(--gold); }
+    .price {
+      font-family: Georgia, serif;
+      font-size: 42px;
+      color: var(--dark-brown);
+      margin-bottom: 4px;
+    }
+    .price span { font-size: 16px; color: var(--mid-brown); }
+    .price-note { font-size: 11px; color: var(--mid-brown); margin-bottom: 28px; }
+    .plan.popular .price-note { color: var(--gold); opacity: 0.7; }
+    .plan ul { list-style: none; margin-bottom: 32px; }
+    .plan li {
+      font-size: 13px;
+      color: var(--mid-brown);
+      padding: 7px 0;
+      border-bottom: 1px solid #f0ebe3;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .plan.popular li { border-bottom-color: rgba(255,255,255,0.1); }
+    .plan li::before { content: "•"; color: var(--gold); font-size: 16px; }
+    .plan-btn {
+      display: block;
+      text-align: center;
+      padding: 14px;
+      font-size: 12px;
+      letter-spacing: 2px;
+      font-weight: 700;
+      text-decoration: none;
+      background: var(--dark-brown);
+      color: var(--cream);
+    }
+    .plan.popular .plan-btn { background: var(--gold); color: var(--dark-brown); }
+
+    /* TRIAL BANNER */
+    .trial {
+      background: var(--gold);
+      padding: 40px;
+      text-align: center;
+    }
+    .trial h3 {
+      font-family: Georgia, serif;
+      font-size: 26px;
+      color: var(--dark-brown);
+      margin-bottom: 10px;
+    }
+    .trial p { color: var(--dark-brown); font-size: 14px; margin-bottom: 24px; opacity: 0.8; }
+    .trial a {
+      background: var(--dark-brown);
+      color: var(--cream);
+      padding: 14px 36px;
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 2px;
+      font-weight: 700;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--dark-brown);
+      padding: 40px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .footer-logo {
+      font-family: Georgia, serif;
+      color: var(--gold);
+      font-size: 18px;
+      letter-spacing: 3px;
+    }
+    footer p { color: var(--gold); font-size: 12px; opacity: 0.6; }
+    footer a { color: var(--gold); text-decoration: none; font-size: 13px; margin-left: 24px; opacity: 0.8; }
+
+    @media (max-width: 600px) {
+      nav { padding: 16px 20px; }
+      .hero h1 { font-size: 34px; }
+      .hero { padding: 60px 20px; }
+      footer { padding: 30px 20px; flex-direction: column; text-align: center; }
+      footer a { margin: 0 10px; }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1><span class="dot">•</span> NORA <span class="dot">•</span></h1>
-    <h2 style="font-family: Arial; font-size: 16px; letter-spacing: 6px; color: #8B5E3C; font-weight: 400;">AGENTS</h2>
-    <hr style="border: none; border-top: 1px solid #c8a165; margin: 20px auto; width: 300px;">
-    <p>COMING SOON</p>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    NORA
+    <span>AGENTS</span>
   </div>
+  <a href="https://app.noraagents.com/en/accounts/signup/" class="nav-cta">GET STARTED</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-tag">• AI SOLUTIONS FOR SMALL BUSINESS •</p>
+  <div class="divider"></div>
+  <h1>Your Business Deserves a 24/7 AI Assistant</h1>
+  <p>We build intelligent AI agents that answer questions, book appointments, and capture leads — so you never miss a customer again.</p>
+  <div class="hero-buttons">
+    <a href="https://app.noraagents.com/en/accounts/signup/" class="btn-primary">START FREE TRIAL</a>
+    <a href="#services" class="btn-secondary">SEE HOW IT WORKS</a>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <h2>How It Works</h2>
+  <p>THREE SIMPLE STEPS</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h3>Choose Your Package</h3>
+      <p>Pick the AI agent that fits your business — restaurant, clinic, real estate, salon, and more.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>We Set It Up</h3>
+      <p>We configure your agent with your business info, services, and hours. Ready in 24 hours.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h3>Start Converting</h3>
+      <p>Your AI agent goes live on your website and WhatsApp, answering customers around the clock.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <h2>AI Agents for Every Business</h2>
+  <p>INDUSTRY-SPECIFIC SOLUTIONS</p>
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-icon">🍽️</div>
+      <h3>Restaurant</h3>
+      <p>Handles reservations, answers menu questions, and captures bookings 24/7 — even when you're busy.</p>
+      <span class="card-tag">RESERVATIONS</span>
+      <span class="card-tag">MENU Q&A</span>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">🏠</div>
+      <h3>Real Estate</h3>
+      <p>Qualifies leads, answers listing questions, and books property viewings automatically.</p>
+      <span class="card-tag">LEAD CAPTURE</span>
+      <span class="card-tag">VIEWINGS</span>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">🏥</div>
+      <h3>Clinic & Medical</h3>
+      <p>Books patient appointments, answers common health questions, and reduces front desk workload.</p>
+      <span class="card-tag">APPOINTMENTS</span>
+      <span class="card-tag">PATIENT INFO</span>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">💅</div>
+      <h3>Beauty & Salon</h3>
+      <p>Books appointments, answers service questions, and responds to Instagram DMs automatically.</p>
+      <span class="card-tag">BOOKINGS</span>
+      <span class="card-tag">SERVICES</span>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">⚖️</div>
+      <h3>Law Firm</h3>
+      <p>Qualifies potential clients, collects case details, and books consultations professionally.</p>
+      <span class="card-tag">CLIENT INTAKE</span>
+      <span class="card-tag">CONSULTATIONS</span>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">🦷</div>
+      <h3>Dental Office</h3>
+      <p>Books dental appointments, explains procedures, and handles patient inquiries automatically.</p>
+      <span class="card-tag">APPOINTMENTS</span>
+      <span class="card-tag">PROCEDURES</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <h2>Simple, Transparent Pricing</h2>
+  <p>7-DAY FREE TRIAL — NO CREDIT CARD REQUIRED</p>
+  <div class="plans">
+
+    <div class="plan">
+      <h3>Starter</h3>
+      <p class="subtitle">FOR SMALL BUSINESSES</p>
+      <div class="price">$99<span>/mo</span></div>
+      <p class="price-note">7-day free trial included</p>
+      <ul>
+        <li>1 AI Chat Agent</li>
+        <li>Website Integration</li>
+        <li>WhatsApp Integration</li>
+        <li>500,000 Characters</li>
+        <li>24/7 Customer Support</li>
+        <li>Custom Knowledge Base</li>
+      </ul>
+      <a href="https://app.noraagents.com/en/accounts/signup/" class="plan-btn">START FREE TRIAL</a>
+    </div>
+
+    <div class="plan popular">
+      <div class="popular-badge">MOST POPULAR</div>
+      <h3>Professional</h3>
+      <p class="subtitle">FOR GROWING BUSINESSES</p>
+      <div class="price">$149<span>/mo</span></div>
+      <p class="price-note">7-day free trial included</p>
+      <ul>
+        <li>1 AI Chat Agent</li>
+        <li>Website + WhatsApp</li>
+        <li>Facebook Integration</li>
+        <li>1,000,000 Characters</li>
+        <li>Lead Generation</li>
+        <li>Appointment Scheduling</li>
+        <li>Priority Support</li>
+      </ul>
+      <a href="https://app.noraagents.com/en/accounts/signup/" class="plan-btn">START FREE TRIAL</a>
+    </div>
+
+    <div class="plan">
+      <h3>Premium</h3>
+      <p class="subtitle">FOR ESTABLISHED BUSINESSES</p>
+      <div class="price">$199<span>/mo</span></div>
+      <p class="price-note">7-day free trial included</p>
+      <ul>
+        <li>2 AI Chat Agents</li>
+        <li>All Channels</li>
+        <li>Voice Agent</li>
+        <li>Unlimited Characters</li>
+        <li>Advanced Analytics</li>
+        <li>Custom Integrations</li>
+        <li>Dedicated Support</li>
+      </ul>
+      <a href="https://app.noraagents.com/en/accounts/signup/" class="plan-btn">START FREE TRIAL</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- TRIAL BANNER -->
+<section class="trial">
+  <h3>Ready to Never Miss a Customer Again?</h3>
+  <p>Start your free 7-day trial today. No credit card required. Cancel anytime.</p>
+  <a href="https://app.noraagents.com/en/accounts/signup/">START FOR FREE</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">NORA AGENTS</div>
+  <p>© 2026 Nora Agents. All rights reserved.</p>
+  <div>
+    <a href="https://app.noraagents.com/en/accounts/login/">Sign In</a>
+    <a href="mailto:istikbalturut@gmail.com">Contact</a>
+  </div>
+</footer>
+
 </body>
 </html>
