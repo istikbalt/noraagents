@@ -93,7 +93,17 @@
     footer p { color: var(--gold); font-size: 12px; opacity: 0.6; }
     footer a { color: var(--gold); text-decoration: none; font-size: 13px; margin-left: 24px; opacity: 0.8; }
 
+    .demo-section { background: var(--dark-brown); padding: 80px 40px; text-align: center; }
+    .demo-section h2 { font-family: Georgia, serif; font-size: 36px; color: var(--cream); margin-bottom: 16px; }
+    .demo-section > p { color: var(--gold); font-size: 15px; max-width: 560px; margin: 0 auto 40px; line-height: 1.7; opacity: 0.9; }
+    .demo-label { background: var(--gold); color: var(--dark-brown); font-size: 11px; letter-spacing: 3px; font-weight: 700; padding: 8px 20px; display: inline-block; margin-bottom: -1px; }
+    .demo-container { max-width: 780px; margin: 0 auto; border: 2px solid var(--gold); }
+    .demo-container iframe { width: 100%; height: 580px; border: none; display: block; }
+    .demo-note { margin-top: 20px; color: var(--gold); font-size: 12px; opacity: 0.6; letter-spacing: 1px; }
+
     @media (max-width: 768px) {
+      .demo-section { padding: 60px 16px; }
+      .demo-container iframe { height: 500px; }
       nav { padding: 16px 20px; }
       .hero h1 { font-size: 34px; }
       .hero { padding: 60px 20px; }
@@ -125,6 +135,22 @@
     <a href="https://app.noraagents.com/en/billing/stripe/subscription/checkout/session/?purchase_type=package&plan_key=basic&stripe_price_id=price_1TZGywIw9dxkazGAB8aMtgob&billing_cycle=month" class="btn-primary">START FREE TRIAL</a>
     <a href="#services" class="btn-secondary">SEE HOW IT WORKS</a>
   </div>
+</section>
+
+<section class="demo-section" id="demo">
+  <p class="hero-tag">• LIVE DEMO •</p>
+  <div class="divider"></div>
+  <h2>See Nora in Action</h2>
+  <p>This is a real AI agent — just like the one we'll build for your business. Ask it anything about how AI can help you.</p>
+  <div class="demo-label">🤖 TALK TO NORA — OUR AI AGENT</div>
+  <div class="demo-container">
+    <iframe
+      src="https://app.stammer.ai/en/chatbot/embed/049bf1cc-5a51-417d-bf7e-eb9ce3969443"
+      title="Nora AI Agent Demo"
+      allow="microphone; clipboard-read; clipboard-write"
+    ></iframe>
+  </div>
+  <p class="demo-note">↑ THIS IS AN EXAMPLE OF WHAT WE BUILD FOR YOUR BUSINESS</p>
 </section>
 
 <section class="how" id="how">
