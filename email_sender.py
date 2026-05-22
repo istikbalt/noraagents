@@ -21,9 +21,9 @@ def load_env():
 
 def get_email_template(restaurant_name, website, sender_name):
     """
-    Returns a beautifully formatted HTML and Text cold outreach email.
+    Returns a beautifully formatted HTML and Text cold outreach email in English.
     """
-    subject = f"{restaurant_name} + Toronto Akşamları İçin Ufak Bir Öneri 🍕"
+    subject = f"Quick suggestion for {restaurant_name}'s website 🍕"
     
     # Custom HTML content for maximum visual appeal
     html_content = f"""
@@ -31,24 +31,24 @@ def get_email_template(restaurant_name, website, sender_name):
     <body style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 600px; margin: 0 auto; padding: 20px;">
         <div style="background-color: #0a0a0c; color: #ffffff; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
             <h1 style="margin: 0; font-size: 24px; letter-spacing: 1px;">NORA AGENTS</h1>
-            <p style="margin: 5px 0 0 0; font-size: 14px; color: #9c9c9c;">Yapay Zeka Destekli Restoran Asistanları</p>
+            <p style="margin: 5px 0 0 0; font-size: 14px; color: #9c9c9c;">AI-Powered Restaurant Assistants</p>
         </div>
         <div style="padding: 20px; border: 1px solid #dddddd; border-top: none; border-radius: 0 0 8px 8px; background-color: #fafafa;">
-            <p>Merhaba <strong>{restaurant_name}</strong> ekibi,</p>
+            <p>Hi <strong>{restaurant_name}</strong> Team,</p>
             
-            <p>Ben {sender_name}, Toronto'da yaşıyorum ve yerel restoranların dijital dönüşüm süreçlerine ve müşteri deneyimlerine yardımcı olan <a href="https://noraagents.com" style="color: #6366f1; text-decoration: none; font-weight: bold;">noraagents.com</a>'un kurucusuyum.</p>
+            <p>I'm {sender_name}, a Toronto local and the founder of <a href="https://noraagents.com" style="color: #6366f1; text-decoration: none; font-weight: bold;">noraagents.com</a>. We help local GTA restaurants optimize their website guest experience and capture more table bookings using custom AI assistants.</p>
             
-            <p>Sıcak Toronto akşamlarında restoranınızın ne kadar yoğun olabildiğini tahmin edebiliyorum. Web sitenizi (<a href="{website}" style="color: #6366f1; text-decoration: none;">{website.replace('https://', '').replace('http://', '').strip('/')}</a>) incelediğimde harika menünüz ve konseptiniz dikkatimi çekti. Ancak sitenizde, yoğun saatlerde veya restoranınız kapalıyken gelen müşteri sorularını yanıtlayıp onları masaya çekecek akıllı bir yapay zeka asistanı (Chatbot) olmadığını fark ettim.</p>
+            <p>I was browsing your website (<a href="{website}" style="color: #6366f1; text-decoration: none;">{website.replace('https://', '').replace('http://', '').strip('/')}</a>) today and absolutely loved your concept and menu! However, I noticed that during peak dinner rushes or when your restaurant is closed, you don't have an automated AI assistant on your site to instantly answer guest questions and capture reservations.</p>
             
-            <p>Telefonların sürekli çaldığı veya garsonların en yoğun olduğu anlarda, potansiyel müşterilerin anlık sorularını (<i>"Glutensiz seçeneğiniz var mı?", "Bu akşam 20:00 için yer var mı?", "Otoparkınız mevcut mu?"</i>) anında yanıtlayıp doğrudan rezervasyon kanallarınıza yönlendiren Nora Agents chatbot'larını geliştiriyoruz.</p>
+            <p>When phone lines are busy or staff are fully focused on the dining room, guests often drop off if their quick questions aren't answered instantly. We build smart, custom-trained chatbots that handle common inquiries (e.g., <i>"Do you have gluten-free options?", "Can I book a table for 4 tonight at 8 PM?", "Is there parking nearby?"</i>) and direct them straight into your existing booking system 24/7.</p>
             
-            <p>Sizin için web sitenizin içeriğiyle ve menünüzle eğitilmiş özel bir chatbot tasarlayıp <strong>7 gün boyunca tamamen ücretsiz</strong> denemenizi sağlamak isterim. Üstelik kurulum ücreti almadan, 5 dakika içinde sitenize entegre edebiliriz.</p>
+            <p>I would love to design a custom chatbot trained on your menu and hours, and let you test it out on your site completely <strong>free for 7 days</strong> with zero setup fees or commitments.</p>
             
-            <p>Bu hafta detayları konuşmak ve size özel hazırlayabileceğimiz demoyu göstermek için kısa bir telefon görüşmesi yapabilir miyiz?</p>
+            <p>Would you be open to a quick 5-minute chat this week to see a live demo of what we can build for {restaurant_name}?</p>
             
-            <p style="margin-top: 30px;">Sevgiler,<br>
+            <p style="margin-top: 30px;">Best regards,<br>
             <strong>{sender_name}</strong><br>
-            Kurucu, Nora Agents<br>
+            Founder, Nora Agents<br>
             <a href="https://noraagents.com" style="color: #6366f1; text-decoration: none;">noraagents.com</a></p>
         </div>
     </body>
@@ -56,21 +56,21 @@ def get_email_template(restaurant_name, website, sender_name):
     """
     
     text_content = f"""
-Merhaba {restaurant_name} ekibi,
+Hi {restaurant_name} Team,
 
-Ben {sender_name}, Toronto'da yaşıyorum ve yerel restoranların dijital dönüşüm süreçlerine ve müşteri deneyimlerine yardımcı olan noraagents.com'un kurucusuyum.
+I'm {sender_name}, a Toronto local and the founder of noraagents.com. We help local GTA restaurants optimize their website guest experience and capture more table bookings using custom AI assistants.
 
-Sıcak Toronto akşamlarında restoranınızın ne kadar yoğun olabildiğini tahmin edebiliyorum. Web sitenizi ({website}) incelediğimde harika menünüz dikkatimi çekti. Ancak sitenizde, yoğun saatlerde veya restoranınız kapalıyken gelen müşteri sorularını yanıtlayıp onları masaya çekecek akıllı bir yapay zeka asistanı (Chatbot) olmadığını fark ettim.
+I was browsing your website ({website}) today and absolutely loved your concept and menu! However, I noticed that during peak dinner rushes or when your restaurant is closed, you don't have an automated AI assistant on your site to instantly answer guest questions and capture reservations.
 
-Telefonların sürekli çaldığı veya garsonların en yoğun olduğu anlarda, potansiyel müşterilerin anlık sorularını ("Glutensiz seçeneğiniz var mı?", "Bu akşam 20:00 için yer var mı?", "Otoparkınız mevcut mu?") anında yanıtlayıp doğrudan rezervasyon kanallarınıza yönlendiren Nora Agents chatbot'larını geliştiriyoruz.
+When phone lines are busy or staff are fully focused on the dining room, guests often drop off if their quick questions aren't answered instantly. We build smart, custom-trained chatbots that handle common inquiries (e.g., "Do you have gluten-free options?", "Can I book a table for 4 tonight at 8 PM?", "Is there parking nearby?") and direct them straight into your existing booking system 24/7.
 
-Sizin için web sitenizin içeriğiyle ve menünüzle eğitilmiş özel bir chatbot tasarlayıp 7 gün boyunca tamamen ücretsiz denemenizi sağlamak isterim. Üstelik kurulum ücreti almadan, 5 dakika içinde sitenize entegre edebiliriz.
+I would love to design a custom chatbot trained on your menu and hours, and let you test it out on your site completely free for 7 days with zero setup fees or commitments.
 
-Bu hafta detayları konuşmak ve size özel hazırlayabileceğimiz demoyu göstermek için kısa bir telefon görüşmesi yapabilir miyiz?
+Would you be open to a quick 5-minute chat this week to see a live demo of what we can build for {restaurant_name}?
 
-Sevgiler,
+Best regards,
 {sender_name}
-Kurucu, Nora Agents
+Founder, Nora Agents
 noraagents.com
     """
     
