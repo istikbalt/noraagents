@@ -4,6 +4,7 @@ import csv
 import sys
 import time
 import requests
+from urllib.parse import urljoin
 
 def get_gta_restaurants():
     """
@@ -95,6 +96,70 @@ def get_gta_restaurants():
     except Exception as e:
         print(f"[!] Error querying OpenStreetMap: {e}")
         return []
+
+def find_emails_on_website(url):
+    """
+    Scrapes the homepage and common subpages (contact, about, etc.) of a website
+    to find email addresses.
+    Returns a string of unique emails separated by commas, or "N/A" if none found.
+    """
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    }
+    emails = set()
+    
+    # Standard email regex pattern
+    email_pattern = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+    
+    try:
+        response = requests.get(url, headers=headers, timeout=10, allow_redirects=True)
+        if response.status_code == 200:
+            html = response.text
+            found = re.findall(email_pattern, html)
+            for email in found:
+                email_lower = email.lower()
+                # Exclude static assets or image files that match regex incorrectly
+                if not any(email_lower.endswith(ext) for ext in ['.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp', '.css', '.js']):
+                    emails.add(email.strip())
+            
+            # Find links that might be contact or about pages
+            contact_links = []
+            href_patterns = [r'href=["\']([^"\']*(?:contact|about|info|reach|connect)[^"\']*)["\']']
+            for pattern in href_patterns:
+                matches = re.findall(pattern, html, re.IGNORECASE)
+                for match in matches:
+                    if match.startswith('http'):
+                        contact_links.append(match)
+                    elif match.startswith('/'):
+                        contact_links.append(urljoin(url, match))
+            
+            # De-duplicate contact links and limit to top 3 to keep it fast
+            contact_links = list(set(contact_links))[:3]
+            
+            # If no contact links detected, try guessing standard paths
+            if not contact_links:
+                for path in ['contact', 'contact-us', 'about', 'about-us', 'info']:
+                    contact_links.append(urljoin(url, path))
+            
+            # Fetch contact pages to scan for emails
+            for link in contact_links:
+                try:
+                    res = requests.get(link, headers=headers, timeout=8, allow_redirects=True)
+                    if res.status_code == 200:
+                        found_sub = re.findall(email_pattern, res.text)
+                        for email in found_sub:
+                            email_lower = email.lower()
+                            if not any(email_lower.endswith(ext) for ext in ['.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp', '.css', '.js']):
+                                emails.add(email.strip())
+                except Exception:
+                    continue
+                    
+    except Exception:
+        pass
+        
+    if emails:
+        return ", ".join(sorted(list(emails)))
+    return "N/A"
 
 def check_for_chatbot(url):
     """
@@ -196,9 +261,9 @@ def main():
 
     # Step 2: Screen websites for chatbots
     output_file = "toronto_restaurant_leads.csv"
-    fieldnames = ["Restaurant Name", "Website", "Phone", "Address", "City", "Status", "Chatbot Detected"]
+    fieldnames = ["Restaurant Name", "Website", "Email", "Phone", "Address", "City", "Status", "Chatbot Detected"]
     
-    print("\n[*] Starting chatbot screening. This might take several minutes...")
+    print("\n[*] Starting chatbot screening and email harvesting...")
     print(f"[*] Results will be saved to: {output_file}\n")
     
     leads_saved = 0
@@ -218,6 +283,7 @@ def main():
             print(f"[{idx}/{total_leads}] Checking: {name} ({url})...", end="", flush=True)
             
             has_bot, bot_type = check_for_chatbot(url)
+            email = "N/A"
             
             if "Unreachable" in bot_type or "Timeout" in bot_type or "Connection Error" in bot_type:
                 status = "Unreachable Website"
@@ -230,12 +296,15 @@ def main():
             else:
                 status = "No Chatbot (HOT PROSPECT)"
                 chatbot_status = "None"
-                print(" [OK] NO CHATBOT!")
+                print(" [OK] NO CHATBOT! Hunting for email...", end="", flush=True)
+                email = find_emails_on_website(url)
+                print(f" Found: {email}")
                 leads_saved += 1
                 
             writer.writerow({
                 "Restaurant Name": name,
                 "Website": url,
+                "Email": email,
                 "Phone": phone,
                 "Address": addr,
                 "City": city,
