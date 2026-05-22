@@ -23,7 +23,7 @@ def get_email_template(restaurant_name, website, sender_name):
     """
     Returns a beautifully formatted HTML and Text cold outreach email in English.
     """
-    subject = f"Quick suggestion for {restaurant_name}'s website 🍕"
+    subject = f"Quick suggestion for {restaurant_name}'s website"
     
     # Custom HTML content for maximum visual appeal
     html_content = f"""
