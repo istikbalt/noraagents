@@ -13,19 +13,15 @@ def get_gta_restaurants():
     print("[*] Connecting to OpenStreetMap Overpass API...")
     overpass_url = "https://overpass-api.de/api/interpreter"
     
-    # Overpass QL Query for restaurants with websites in GTA cities
-    # Cities covered: Toronto, Mississauga, Brampton, Markham, Vaughan, Richmond Hill, Oakville
     query = """
     [out:json][timeout:180];
-    (
-      area["name"="Toronto"]->.toronto;
-      area["name"="Mississauga"]->.mississauga;
-      area["name"="Brampton"]->.brampton;
-      area["name"="Markham"]->.markham;
-      area["name"="Vaughan"]->.vaughan;
-      area["name"="Richmond Hill"]->.richmond_hill;
-      area["name"="Oakville"]->.oakville;
-    );
+    area["name"="Toronto"]->.toronto;
+    area["name"="Mississauga"]->.mississauga;
+    area["name"="Brampton"]->.brampton;
+    area["name"="Markham"]->.markham;
+    area["name"="Vaughan"]->.vaughan;
+    area["name"="Richmond Hill"]->.richmond_hill;
+    area["name"="Oakville"]->.oakville;
     (
       node["amenity"="restaurant"]["website"](area.toronto);
       way["amenity"="restaurant"]["website"](area.toronto);
@@ -45,8 +41,11 @@ def get_gta_restaurants():
     out tags;
     """
     
+    headers = {
+        'User-Agent': 'NoraAgentsLeadFinder/1.0'
+    }
     try:
-        response = requests.post(overpass_url, data={'data': query}, timeout=90)
+        response = requests.get(overpass_url, params={'data': query}, headers=headers, timeout=120)
         if response.status_code != 200:
             print(f"[!] Overpass API returned status code {response.status_code}")
             return []
@@ -157,12 +156,44 @@ def main():
     print("      NORA AGENTS — TORONTO GTA RESTAURANT LEAD FINDER      ")
     print("=" * 60)
     
+    # Parse limits
+    limit = 20  # Safe default for quick testing
+    if len(sys.argv) > 1:
+        for arg in sys.argv[1:]:
+            if arg.startswith("--limit="):
+                val = arg.split("=")[1]
+                if val.lower() == "all":
+                    limit = None
+                else:
+                    try:
+                        limit = int(val)
+                    except ValueError:
+                        pass
+            elif arg == "--limit" and len(sys.argv) > sys.argv.index(arg) + 1:
+                val = sys.argv[sys.argv.index(arg) + 1]
+                if val.lower() == "all":
+                    limit = None
+                else:
+                    try:
+                        limit = int(val)
+                    except ValueError:
+                        pass
+
     # Step 1: Get restaurants in GTA with websites
     raw_leads = get_gta_restaurants()
     if not raw_leads:
         print("[!] No leads found. Exiting.")
         return
         
+    total_leads_available = len(raw_leads)
+    
+    if limit is not None:
+        raw_leads = raw_leads[:limit]
+        print(f"[*] Applying screening limit: checking first {limit} out of {total_leads_available} available leads.")
+        print("[TIP] Tip: Run 'python lead_finder.py --limit=all' to screen all restaurants or 'python lead_finder.py --limit=100' for a custom number.")
+    else:
+        print(f"[*] Screening all {total_leads_available} available leads in GTA.")
+
     # Step 2: Screen websites for chatbots
     output_file = "toronto_restaurant_leads.csv"
     fieldnames = ["Restaurant Name", "Website", "Phone", "Address", "City", "Status", "Chatbot Detected"]
@@ -191,15 +222,15 @@ def main():
             if "Unreachable" in bot_type or "Timeout" in bot_type or "Connection Error" in bot_type:
                 status = "Unreachable Website"
                 chatbot_status = "N/A"
-                print(f" ❌ {bot_type}")
+                print(f" [FAIL] {bot_type}")
             elif has_bot:
                 status = "Has Chatbot"
                 chatbot_status = bot_type
-                print(f" 🤖 Yes ({bot_type})")
+                print(f" [BOT] Yes ({bot_type})")
             else:
                 status = "No Chatbot (HOT PROSPECT)"
                 chatbot_status = "None"
-                print(" ✅ NO CHATBOT!")
+                print(" [OK] NO CHATBOT!")
                 leads_saved += 1
                 
             writer.writerow({
@@ -221,8 +252,8 @@ def main():
     print(f"[+] Hot prospects (with website, NO chatbot) saved: {leads_saved}")
     print(f"[+] Saved leads to CSV file: {output_file}")
     print("=" * 60)
-    print("\n💡 TIP: Open 'toronto_restaurant_leads.csv' and filter by 'Status' = 'No Chatbot (HOT PROSPECT)'.")
-    print("💡 These are the restaurants you should pitch text chatbots to!")
+    print("\n[TIP] TIP: Open 'toronto_restaurant_leads.csv' and filter by 'Status' = 'No Chatbot (HOT PROSPECT)'.")
+    print("[TIP] These are the restaurants you should pitch text chatbots to!")
 
 if __name__ == "__main__":
     main()
