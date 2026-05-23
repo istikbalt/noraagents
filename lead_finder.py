@@ -81,7 +81,7 @@ def get_gta_restaurants():
                     "city": city
                 })
                 
-        # Remove duplicates
+        # Remove duplicates within fetched elements
         seen_sites = set()
         unique_restaurants = []
         for r in restaurants:
@@ -90,7 +90,7 @@ def get_gta_restaurants():
                 seen_sites.add(clean_url)
                 unique_restaurants.append(r)
                 
-        print(f"[+] Cleaned duplicates. Found {len(unique_restaurants)} unique restaurant websites.")
+        print(f"[+] Cleaned duplicates. Found {len(unique_restaurants)} unique restaurant websites in GTA.")
         return unique_restaurants
         
     except Exception as e:
@@ -195,7 +195,6 @@ def check_for_chatbot(url):
     }
     
     try:
-        # Fetch the homepage
         response = requests.get(url, headers=headers, timeout=12, allow_redirects=True)
         if response.status_code != 200:
             return False, "Unreachable (Status Code)"
@@ -218,11 +217,44 @@ def check_for_chatbot(url):
 
 def main():
     print("=" * 60)
-    print("      NORA AGENTS — TORONTO GTA RESTAURANT LEAD FINDER      ")
+    print("      NORA AGENTS — DATABASE-FIRST RESTAURANT LEAD FINDER      ")
     print("=" * 60)
     
-    # Parse limits
-    limit = 20  # Safe default for quick testing
+    output_file = "toronto_restaurant_leads.csv"
+    
+    # Read existing leads to prevent duplicate scraping and preserve sent logs
+    existing_websites = set()
+    total_already_sent = 0
+    file_exists = os.path.exists(output_file)
+    headers_exist = False
+    
+    if file_exists:
+        print("[*] Loading existing leads from database to prevent duplicate scraping...")
+        try:
+            with open(output_file, mode="r", newline="", encoding="utf-8") as f:
+                reader = csv.DictReader(f)
+                if reader.fieldnames:
+                    headers_exist = True
+                    for row in reader:
+                        web = row.get("Website", "").strip()
+                        if web:
+                            clean_url = web.replace("https://", "").replace("http://", "").replace("www.", "").strip("/")
+                            existing_websites.add(clean_url)
+                        if row.get("Sent_Status") == "SENT":
+                            total_already_sent += 1
+            print(f"[+] Loaded {len(existing_websites)} existing websites from database.")
+            print(f"[+] Total cold emails sent in this campaign so far: {total_already_sent} / 1500")
+            if total_already_sent >= 1500:
+                print("=" * 60)
+                print("[+] CAMPAIGN TARGET REACHED! 1500 cold emails have been successfully sent.")
+                print("[+] Stopping new scraping. Evaluation time!")
+                print("=" * 60)
+                return
+        except Exception as e:
+            print(f"[!] Warning reading existing database: {e}")
+            
+    # Parse screening limits
+    limit = 50  # Default limit for new leads
     if len(sys.argv) > 1:
         for arg in sys.argv[1:]:
             if arg.startswith("--limit="):
@@ -250,37 +282,55 @@ def main():
         print("[!] No leads found. Exiting.")
         return
         
-    total_leads_available = len(raw_leads)
+    # Filter out already existing leads before scraping!
+    new_leads = []
+    for lead in raw_leads:
+        clean_url = lead["website"].replace("https://", "").replace("http://", "").replace("www.", "").strip("/")
+        if clean_url not in existing_websites:
+            new_leads.append(lead)
+            
+    print(f"[+] Out of {len(raw_leads)} fetched restaurants, {len(new_leads)} are BRAND NEW leads.")
     
+    if not new_leads:
+        print("[+] STATUS: All fetched leads already exist in database. No new scraping needed!")
+        return
+        
     if limit is not None:
-        raw_leads = raw_leads[:limit]
-        print(f"[*] Applying screening limit: checking first {limit} out of {total_leads_available} available leads.")
-        print("[TIP] Tip: Run 'python lead_finder.py --limit=all' to screen all restaurants or 'python lead_finder.py --limit=100' for a custom number.")
+        new_leads = new_leads[:limit]
+        print(f"[*] Applying limit: scraping first {limit} new leads out of {len(new_leads)} available.")
     else:
-        print(f"[*] Screening all {total_leads_available} available leads in GTA.")
+        print(f"[*] Scraping all {len(new_leads)} new leads.")
 
-    # Step 2: Screen websites for chatbots
-    output_file = "toronto_restaurant_leads.csv"
-    fieldnames = ["Restaurant Name", "Website", "Email", "Phone", "Address", "City", "Status", "Chatbot Detected"]
+    # Step 2: Screen websites for chatbots and append to database
+    fieldnames = [
+        "Restaurant Name", "Website", "Email", "Phone", "Address", "City", 
+        "Status", "Chatbot Detected", "Sent_Status", "Sent_Date"
+    ]
     
-    print("\n[*] Starting chatbot screening and email harvesting...")
-    print(f"[*] Results will be saved to: {output_file}\n")
+    print("\n[*] Starting chatbot screening and email harvesting for new leads...")
+    print(f"[*] Results will be appended directly to: {output_file}\n")
     
     leads_saved = 0
-    total_leads = len(raw_leads)
+    total_leads = len(new_leads)
     
-    with open(output_file, mode="w", newline="", encoding="utf-8") as file:
+    # Open in append mode if file exists, otherwise write mode
+    write_mode = "a" if file_exists else "w"
+    
+    with open(output_file, mode=write_mode, newline="", encoding="utf-8") as file:
         writer = csv.DictWriter(file, fieldnames=fieldnames)
-        writer.writeheader()
         
-        for idx, lead in enumerate(raw_leads, start=1):
+        # If writing a brand new file, write header
+        if not file_exists or not headers_exist:
+            writer.writeheader()
+            
+        for idx, lead in enumerate(new_leads, start=1):
             name = lead["name"]
             url = lead["website"]
             phone = lead["phone"]
             addr = lead["address"]
             city = lead["city"]
             
-            print(f"[{idx}/{total_leads}] Checking: {name} ({url})...", end="", flush=True)
+            print(f"[{idx}/{total_leads}] Checking new: {name} ({url})...", end="", flush=True)
             
             has_bot, bot_type = check_for_chatbot(url)
             email = "N/A"
@@ -309,20 +359,20 @@ def main():
                 "Address": addr,
                 "City": city,
                 "Status": status,
-                "Chatbot Detected": chatbot_status
+                "Chatbot Detected": chatbot_status,
+                "Sent_Status": "",  # Empty on new harvest
+                "Sent_Date": ""     # Empty on new harvest
             })
             
             # Short courtesy pause
             time.sleep(0.5)
             
     print("\n" + "=" * 60)
-    print(f"[+] SCREENING COMPLETE!")
-    print(f"[+] Total restaurants checked: {total_leads}")
-    print(f"[+] Hot prospects (with website, NO chatbot) saved: {leads_saved}")
-    print(f"[+] Saved leads to CSV file: {output_file}")
+    print(f"[+] HARVEST COMPLETE!")
+    print(f"[+] New prospects checked: {total_leads}")
+    print(f"[+] New hot prospects added: {leads_saved}")
+    print(f"[+] All data saved live in: {output_file}")
     print("=" * 60)
-    print("\n[TIP] TIP: Open 'toronto_restaurant_leads.csv' and filter by 'Status' = 'No Chatbot (HOT PROSPECT)'.")
-    print("[TIP] These are the restaurants you should pitch text chatbots to!")
 
 if __name__ == "__main__":
     main()

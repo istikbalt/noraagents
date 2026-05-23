@@ -4,6 +4,7 @@ import csv
 import sys
 import time
 import smtplib
+from datetime import datetime
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -76,9 +77,49 @@ noraagents.com
     
     return subject, html_content, text_content
 
+def update_csv_status(leads_file, restaurant_name, status, sent_date):
+    """
+    Safely updates the sent status and date of a restaurant in the local CSV file.
+    """
+    rows = []
+    headers = []
+    
+    # Read entire file
+    with open(leads_file, mode="r", newline="", encoding="utf-8") as file:
+        reader = csv.reader(file)
+        headers = next(reader)
+        
+        # Ensure Sent_Status and Sent_Date are in headers
+        if "Sent_Status" not in headers:
+            headers.append("Sent_Status")
+        if "Sent_Date" not in headers:
+            headers.append("Sent_Date")
+            
+        status_idx = headers.index("Sent_Status")
+        date_idx = headers.index("Sent_Date")
+        
+        for row in reader:
+            # Pad row if it has fewer elements than headers
+            while len(row) < len(headers):
+                row.append("")
+                
+            # If matches, update
+            # Column index 0 is Restaurant Name in lead_finder output
+            if row[0].strip() == restaurant_name.strip():
+                row[status_idx] = status
+                row[date_idx] = sent_date
+            rows.append(row)
+            
+    # Write back to file
+    with open(leads_file, mode="w", newline="", encoding="utf-8") as file:
+        writer = csv.writer(file)
+        writer.writerow(headers)
+        writer.writerows(rows)
+
 def main():
     print("=" * 60)
     print("        NORA AGENTS - COLD OUTREACH EMAIL SENDER        ")
+    print("        (With Smart State Tracking & Spam Throttling)    ")
     print("=" * 60)
     
     load_env()
@@ -95,35 +136,58 @@ def main():
     
     # Validation check
     if not smtp_email or not smtp_password:
-        print("[!] HATA: SMTP_EMAIL ve SMTP_PASSWORD cevre degiskenleri .env dosyasinda bulunamadi!")
-        print("[!] Lutfen bir '.env' dosyasi olusturun ve bilgilerinizi doldurun.")
-        print("[TIP] Ornek format:")
-        print("    SMTP_HOST=smtp.gmail.com")
-        print("    SMTP_PORT=587")
-        print("    SMTP_EMAIL=your-email@gmail.com")
-        print("    SMTP_PASSWORD=your-app-password")
-        print("    SMTP_FROM_NAME=Istikbal")
+        print("[!] ERROR: SMTP_EMAIL and SMTP_PASSWORD missing in .env!")
         return
         
     leads_file = "toronto_restaurant_leads.csv"
     if not os.path.exists(leads_file):
-        print(f"[!] HATA: '{leads_file}' bulunamadi. Lutfen once lead finder scriptini calistirin.")
+        print(f"[!] ERROR: '{leads_file}' not found.")
         return
         
-    # Read hot prospects
+    # Read custom limits from command line arguments
+    # Usage: python email_sender.py --send --limit 50
+    limit = 99999
+    for arg in sys.argv:
+        if "--limit" in arg:
+            try:
+                limit = int(sys.argv[sys.argv.index(arg) + 1])
+                print(f"[INFO] Campaign limit set to: {limit} emails")
+            except Exception:
+                pass
+                
+    # Read hot prospects from CSV, filtering out already sent ones and garbage emails
     prospects = []
+    total_already_sent = 0
+    
     with open(leads_file, mode="r", newline="", encoding="utf-8") as file:
         reader = csv.DictReader(file)
+        
+        # Check if headers exist
+        fieldnames = reader.fieldnames
+        has_sent_column = "Sent_Status" in fieldnames if fieldnames else False
+        
         for row in reader:
+            # Count if already sent successfully
+            if has_sent_column and row.get("Sent_Status") == "SENT":
+                total_already_sent += 1
+                continue
+                
             if row.get("Status") == "No Chatbot (HOT PROSPECT)":
                 emails_str = row.get("Email", "N/A")
                 if emails_str and emails_str != "N/A":
                     # Split comma-separated emails and clean them
                     emails = [e.strip() for e in emails_str.split(",") if "@" in e]
-                    # Filter out Wix Sentry / false positive emails
+                    
+                    # Filter out Wix templates / Sentries / mock placeholders
                     clean_emails = []
                     for e in emails:
-                        if not any(x in e.lower() for x in ["sentry", "wixpress", "example.com", "mysite.com", "domain.com", "localoria.com"]):
+                        e_low = e.lower()
+                        garbage_signatures = [
+                            "sentry", "wixpress", "example.com", "mysite.com", 
+                            "domain.com", "localoria.com", "your@email.com", 
+                            "yourdomain.com", "email.com", "xxx@xxx.com"
+                        ]
+                        if not any(x in e_low for x in garbage_signatures):
                             clean_emails.append(e)
                             
                     if clean_emails:
@@ -133,21 +197,31 @@ def main():
                             "emails": clean_emails
                         })
                         
-    if not prospects:
-        print("[!] Gonderim yapilabilecek e-postali hicbir sicak aday bulunamadi.")
+    print(f"[+] Total cold emails sent in this campaign so far: {total_already_sent} / 1500")
+    
+    if total_already_sent >= 1500:
+        print("=" * 60)
+        print("[+] CAMPAIGN TARGET REACHED! 1500 cold emails have been successfully sent.")
+        print("[+] Automatically stopping nightly campaign. Evaluation time!")
+        print("=" * 60)
         return
         
-    print(f"[+] Toplam {len(prospects)} adet restoran sicak adayi e-postalariyla hazirlandi.")
-    print("[*] Gonderime baslamak icin onay bekleniyor...")
+    if not prospects:
+        print("[+] STATUS: No new unsent prospects found. Campaign complete!")
+        return
+        
+    # Apply limit
+    active_prospects = prospects[:limit]
+    print(f"[+] Total prospects available: {len(prospects)}")
+    print(f"[+] Active prospects selected for this run: {len(active_prospects)}")
     
     # Dry run check
     dry_run = True
     if len(sys.argv) > 1 and "--send" in sys.argv:
         dry_run = False
-        print("[WARNING] DIKKAT: Canli gonderim modu aktif! E-postalar gercek adreslere gonderilecek.")
+        print("[WARNING] LIVE SEND MODE IS ACTIVE! Sending actual emails.")
     else:
-        print("[INFO] MOD: DRY-RUN (Simulasyon). E-postalar gonderilmeyecek, sadece taslaklar yazdirilacak.")
-        print("[TIP] Gercek gonderim icin: 'python email_sender.py --send' komutunu kullanin.")
+        print("[INFO] MODE: DRY-RUN (Simulation). Add '--send' to send live.")
         
     print("\n" + "-" * 50)
     
@@ -155,50 +229,56 @@ def main():
         # Establish connection if not in dry-run
         server = None
         if not dry_run:
-            print("[*] SMTP sunucusuna baglaniliyor...")
+            print("[*] Connecting to SMTP server...")
             server = smtplib.SMTP(smtp_host, smtp_port)
             server.starttls()
             server.login(smtp_email, smtp_password)
-            print("[+] SMTP baglantisi ve giris basarili!\n")
+            print("[+] SMTP Connection and login successful!\n")
             
         success_count = 0
-        for idx, prospect in enumerate(prospects, start=1):
+        for idx, prospect in enumerate(active_prospects, start=1):
             name = prospect["name"]
             web = prospect["website"]
             target_emails = prospect["emails"]
             
             subject, html, text = get_email_template(name, web, sender_name)
             
-            print(f"[{idx}/{len(prospects)}] Restoran: {name}")
-            print(f"    Alicilar: {', '.join(target_emails)}")
-            print(f"    Konu: {subject}")
+            print(f"[{idx}/{len(active_prospects)}] Restaurant: {name}")
+            print(f"    Recipients: {', '.join(target_emails)}")
+            print(f"    Subject: {subject}")
             
             if dry_run:
-                print("    [SIMULATION] E-posta basariyla taslak olarak olusturuldu.")
+                print("    [SIMULATION] Email draft created successfully.")
             else:
                 try:
                     # Create MIME message
                     msg = MIMEMultipart("alternative")
                     msg["Subject"] = subject
                     msg["From"] = f"{sender_name} <{smtp_email}>"
-                    msg["To"] = target_emails[0] # Primary recipient
+                    msg["To"] = target_emails[0]
                     if len(target_emails) > 1:
                         msg["Cc"] = ", ".join(target_emails[1:])
                         
                     msg.attach(MIMEText(text, "plain", "utf-8"))
                     msg.attach(MIMEText(html, "html", "utf-8"))
                     
-                    # Combine all recipients for SMTP sending
+                    # Combine all recipients for SMTP
                     all_recipients = target_emails
                     
                     server.sendmail(smtp_email, all_recipients, msg.as_string())
-                    print("    [OK] E-posta basariyla gonderildi!")
+                    print("    [OK] Email sent successfully!")
+                    
+                    # Save state tracking live to CSV!
+                    now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    update_csv_status(leads_file, name, "SENT", now_str)
+                    print("    [STATE] CSV updated to SENT.")
+                    
                     success_count += 1
                     
                     # Anti-spam delay between emails
-                    time.sleep(3)
+                    time.sleep(4)
                 except Exception as ex:
-                    print(f"    [FAIL] Gonderim hatasi: {ex}")
+                    print(f"    [FAIL] Sending error: {ex}")
                     
             print("-" * 50)
             
@@ -207,15 +287,13 @@ def main():
             
         print("\n" + "=" * 60)
         if dry_run:
-            print(f"[+] SIMULASYON TAMAMLANDI! {len(prospects)} adet taslak basariyla incelendi.")
-            print("[TIP] Gercek gonderime hazir oldugunuzda '.env' dosyanizi doldurun ve:")
-            print("      'python email_sender.py --send' komutunu calistirin.")
+            print(f"[+] SIMULATION COMPLETE! Ready to send {len(active_prospects)} emails.")
         else:
-            print(f"[+] GONDERIM TAMAMLANDI! Basariyla Gonderilen: {success_count} / {len(prospects)}")
+            print(f"[+] SEND COMPLETE! Successfully sent: {success_count} / {len(active_prospects)}")
         print("=" * 60)
         
     except Exception as e:
-        print(f"[!] SMTP Baglanti hatasi: {e}")
+        print(f"[!] SMTP Error occurred: {e}")
         if server:
             try:
                 server.quit()
