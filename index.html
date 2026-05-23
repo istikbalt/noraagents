@@ -234,34 +234,20 @@
     </div>
   </div>
   <div class="demo-panel" id="demo-voice">
-    <div class="voice-orb-container" id="voice-frame-container">
-      <button class="demo-tab" style="display: inline-block; border-color: var(--gold); color: var(--gold); padding: 16px 36px; background: transparent; cursor: pointer;" onclick="loadVoiceDemo()">🎙️ ACTIVATE VOICE ASSISTANT</button>
-      <p>Click above to activate the voice assistant and start speaking.<br>Ask Nora how AI can help your business — 24/7.</p>
+    <div class="voice-orb-container">
+      <iframe loading="lazy" src="https://app.noraagents.com/en/voice/embed/b84452eb-41fb-4807-b64f-d06ab4ff356a" width="140px" height="140px" allow="microphone" frameborder="0"></iframe>
+      <p>Click the orb above and start speaking.<br>Ask Nora how AI can help your business — 24/7.</p>
     </div>
   </div>
   <p class="demo-note" style="margin-top:20px;">↑ THIS IS AN EXAMPLE OF WHAT WE BUILD FOR YOUR BUSINESS</p>
 </section>
 
 <script>
-let voiceLoaded = false;
-function loadVoiceDemo() {
-  if (voiceLoaded) return;
-  const container = document.getElementById('voice-frame-container');
-  container.innerHTML = `
-    <iframe src="https://app.noraagents.com/en/voice/embed/b84452eb-41fb-4807-b64f-d06ab4ff356a" width="140px" height="140px" allow="microphone" frameborder="0"></iframe>
-    <p>Click the orb above and start speaking.<br>Ask Nora how AI can help your business — 24/7.</p>
-  `;
-  voiceLoaded = true;
-}
-
 function switchDemo(type, btn) {
   document.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.demo-panel').forEach(p => p.classList.remove('active'));
   document.getElementById('demo-' + type).classList.add('active');
   btn.classList.add('active');
-  if (type === 'voice') {
-    loadVoiceDemo();
-  }
 }
 </script>
 
