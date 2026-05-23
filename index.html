@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nora Agents — AI Assistants for Your Business</title>
   <meta name="description" content="Nora Agents builds custom AI agents that answer questions, book appointments, and capture leads 24/7 for your small business. Ready in 24 hours.">
+  <link rel="canonical" href="https://www.noraagents.com/" />
+  
+  <!-- Google Search Console -->
+  <meta name="google-site-verification" content="ADD_YOUR_CODE_HERE" />
   
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
@@ -13,8 +17,67 @@
   <meta property="og:description" content="Build 24/7 intelligent AI agents that answer questions, book appointments, and capture leads for your small business.">
   <meta property="og:image" content="https://app.noraagents.com/media/site_logos/logo1.png">
   
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Nora Agents — AI Assistants for Your Business">
+  <meta name="twitter:description" content="Build 24/7 intelligent AI agents that answer questions, book appointments, and capture leads for your small business.">
+  <meta name="twitter:image" content="https://app.noraagents.com/media/site_logos/logo1.png">
+  
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="https://app.noraagents.com/media/site_logos/logo1.png" />
+  
+  <!-- Structured Data / JSON-LD Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://www.noraagents.com/#organization",
+        "name": "Nora Agents",
+        "url": "https://www.noraagents.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "@id": "https://www.noraagents.com/#logo",
+          "url": "https://app.noraagents.com/media/site_logos/logo1.png",
+          "caption": "Nora Agents Logo"
+        },
+        "image": {
+          "@id": "https://www.noraagents.com/#logo"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://www.noraagents.com/#website",
+        "url": "https://www.noraagents.com/",
+        "name": "Nora Agents",
+        "publisher": {
+          "@id": "https://www.noraagents.com/#organization"
+        },
+        "description": "Nora Agents builds custom AI agents that answer questions, book appointments, and capture leads 24/7 for your small business."
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://www.noraagents.com/#software",
+        "name": "Nora Agents AI Platform",
+        "url": "https://www.noraagents.com/",
+        "publisher": {
+          "@id": "https://www.noraagents.com/#organization"
+        },
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "All",
+        "offers": {
+          "@type": "AggregateOffer",
+          "priceCurrency": "USD",
+          "lowPrice": "19",
+          "highPrice": "99",
+          "offerCount": "3"
+        }
+      }
+    ]
+  }
+  </script>
+
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
